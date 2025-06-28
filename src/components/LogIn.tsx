@@ -21,7 +21,7 @@ export const LogIn: React.FC<LogInProps> = ({ onNavigate, setAuthenticated }) =>
     try {
       console.log('Sending login request:', { username });
       const response = await axios.post(
-        'http://127.0.0.1:5000/api/auth/login',
+        'https://ailearning-atyu.onrender.com/api/auth/login',
         { username, password },
         { withCredentials: true }
       );

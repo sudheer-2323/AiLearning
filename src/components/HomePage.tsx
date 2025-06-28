@@ -29,7 +29,7 @@ export function HomePage({ onNavigate, showLoginToast, isAuthenticated }: HomePa
 
     const fetchUser = async () => {
       try {
-        const res = await axios.get('http://127.0.0.1:5000/api/auth/check', {
+        const res = await axios.get('https://ailearning-atyu.onrender.com/api/auth/check', {
           withCredentials: true
         });
         if (res.data?.username) {
@@ -55,7 +55,7 @@ export function HomePage({ onNavigate, showLoginToast, isAuthenticated }: HomePa
     setIsGenerating(true);
     try {
       const response = await axios.post(
-        'http://127.0.0.1:5000/api/courses',
+        'https://ailearning-atyu.onrender.com/api/courses',
         { prompt },
         { withCredentials: true }
       );

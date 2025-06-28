@@ -31,7 +31,7 @@ export function CourseCard({ course, onClick }: CourseCardProps) {
  useEffect(() => {
   const fetchUsername = async () => {
     try {
-      const res = await axios.get('http://127.0.0.1:5000/api/auth/check', {
+      const res = await axios.get('https://ailearning-atyu.onrender.com/api/auth/check', {
         withCredentials: true
       });
       if (res.data?.username) {
