@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 // Middleware
-app.use(cors({ origin: 'https://ailearning-2.onrender.com/', credentials: true }));
+app.use(cors({ origin: 'https://ailearning-2.onrender.com', credentials: true }));
 app.use(cookieParser());
 app.use(express.json());
 
