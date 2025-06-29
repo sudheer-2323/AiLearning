@@ -290,6 +290,10 @@ app.get('/api/progress', authenticateToken, async (req: AuthRequest, res) => {
     res.status(500).json({ error: 'Failed to fetch progress' });
   }
 });
+app.get('/ping', (req, res) => {
+  res.status(200).send('Backend is awake!');
+});
+
 
 
 // Start Server
