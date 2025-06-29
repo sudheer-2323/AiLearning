@@ -16,7 +16,7 @@ function App() {
   const handleNavigate = async (page: string) => {
     if (page === 'logout') {
       try {
-        await axios.post('http://127.0.0.1:5000/api/auth/logout', {}, { withCredentials: true });
+        await axios.post('https://ailearning-atyu.onrender.com', {}, { withCredentials: true });
 
         console.log('Logout successful');
       } catch (error) {
