@@ -29,10 +29,10 @@ export function CourseProvider({ children, onNavigate, isAuthenticated }: Course
 
   const fetchCourses = async () => {
     try {
-      console.log('📌 Fetching courses');
+      console.log(' Fetching courses');
       const [coursesRes, progressRes] = await Promise.all([
-        axios.get<Course[]>('https://ailearning-atyu.onrender.com/api/courses', { withCredentials: true }),
-        axios.get('https://ailearning-atyu.onrender.com/api/progress', { withCredentials: true }),
+        axios.get<Course[]>('https://ailearning-2.onrender.com/api/courses', { withCredentials: true }),
+        axios.get('https://ailearning-2.onrender.com/api/progress', { withCredentials: true }),
       ]);
 
       const courses = coursesRes.data;
@@ -68,9 +68,9 @@ export function CourseProvider({ children, onNavigate, isAuthenticated }: Course
       });
 
       setCourses(updatedCourses);
-      console.log('✅ Courses + progress applied:', updatedCourses);
+      console.log(' Courses + progress applied:', updatedCourses);
     } catch (err: any) {
-      console.error('❌ Failed to load courses:', err);
+      console.error(' Failed to load courses:', err);
       if (err.response?.status === 401 || err.response?.status === 403) {
         toast.error('Please log in to view courses');
         onNavigate('LogIn');
@@ -107,15 +107,15 @@ export function CourseProvider({ children, onNavigate, isAuthenticated }: Course
 
   const markLectureComplete = async (courseId: string, lectureId: string) => {
     try {
-      console.log('📌 Sending lecture completion request:', { courseId, lectureId });
+      console.log(' Sending lecture completion request:', { courseId, lectureId });
 
       const response = await axios.post(
-        'https://ailearning-atyu.onrender.com/api/progress/lecture',
+        'https://ailearning-2.onrender.com/api/progress/lecture',
         { courseId, lectureId },
         { withCredentials: true }
       );
 
-      console.log('✅ Progress update response:', response.data);
+      console.log(' Progress update response:', response.data);
       const { progress } = response.data;
 
       const course = courses.find(c => c.id === courseId);
@@ -149,7 +149,7 @@ export function CourseProvider({ children, onNavigate, isAuthenticated }: Course
 
       toast.success(`Lecture completed! Progress: ${progressPercentage.toFixed(1)}%`);
     } catch (error: any) {
-      console.error('❌ Failed to track lecture progress:', error);
+      console.error(' Failed to track lecture progress:', error);
       if (error.response?.status === 401 || error.response?.status === 403) {
         toast.error('Please log in to update progress');
         onNavigate('LogIn');
@@ -161,9 +161,9 @@ export function CourseProvider({ children, onNavigate, isAuthenticated }: Course
 
   const completeQuiz = async (courseId: string, quizId: string, score: number) => {
     try {
-      console.log('📌 Sending quiz completion request:', { courseId, quizId, score });
+      console.log(' Sending quiz completion request:', { courseId, quizId, score });
       await axios.post(
-        'https://ailearning-atyu.onrender.com/api/progress/quiz',
+        'https://ailearning-2.onrender.com/api/progress/quiz',
         { courseId, quizId, score },
         { withCredentials: true }
       );
@@ -192,7 +192,7 @@ export function CourseProvider({ children, onNavigate, isAuthenticated }: Course
 
       toast.success('Quiz completed!');
     } catch (error: any) {
-      console.error('❌ Failed to track quiz progress:', error);
+      console.error(' Failed to track quiz progress:', error);
       if (error.response?.status === 401 || error.response?.status === 403) {
         toast.error('Please log in to complete quiz');
         onNavigate('LogIn');

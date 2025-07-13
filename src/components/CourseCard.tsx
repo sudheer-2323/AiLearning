@@ -153,7 +153,7 @@ export function CourseCard({ course, onClick }: CourseCardProps) {
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
             <span className="text-gray-600">Progress</span>
-            <span className="font-medium text-gray-900">{progress}%</span>
+            <span className="font-medium text-gray-900">{progress.toFixed(2)  }%</span>
           </div>
           
           <div className="w-full bg-gray-200 rounded-full h-2">

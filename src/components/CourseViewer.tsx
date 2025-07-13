@@ -18,6 +18,17 @@ interface CourseViewerProps {
   onNavigate: (page: string) => void;
 }
 
+// Utility function to safely sanitize lecture titles
+function sanitizeTitle(title?: string) {
+  return (title || '')
+    .replace(/^\s*\d+[\.\-:)\]]*\s*/, '')
+    .replace(
+      /([\u2700-\u27BF]|[\uE000-\uF8FF]|[\uD800-\uDFFF]|[\u2011-\u26FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uD83E[\uDD00-\uDDFF])/g,
+      ''
+    )
+    .trim();
+}
+
 export function CourseViewer({ onNavigate }: CourseViewerProps) {
   const { currentCourse } = useCourse();
   const [activeTab, setActiveTab] = useState<'lectures' | 'quizzes' | 'docs'>('lectures');
@@ -48,20 +59,31 @@ export function CourseViewer({ onNavigate }: CourseViewerProps) {
   const completedLectures = currentCourse.lectures.filter(l => l.completed).length;
   const completedQuizzes = currentCourse.quizzes.filter(q => q.completed).length;
 
-  // Individual viewer screens
+  // Lecture viewer
   if (selectedLecture) {
-    const lecture = currentCourse.lectures.find(l => l.id === selectedLecture);
-    if (lecture) {
-      return (
-        <LectureViewer
-          lecture={lecture}
-          courseId={currentCourse.id}
-          onBack={() => setSelectedLecture(null)}
-        />
-      );
-    }
+    const currentIndex = currentCourse.lectures.findIndex(l => l.id === selectedLecture);
+    const lecture = currentCourse.lectures[currentIndex];
+
+    const handleNextLecture = () => {
+      const next = currentCourse.lectures[currentIndex + 1];
+      if (next) {
+        setSelectedLecture(next.id);
+      } else {
+        setSelectedLecture(null);
+      }
+    };
+
+    return (
+      <LectureViewer
+        lecture={lecture}
+        courseId={currentCourse.id}
+        onBack={() => setSelectedLecture(null)}
+        onNextLecture={handleNextLecture}
+      />
+    );
   }
 
+  // Quiz viewer
   if (selectedQuiz) {
     const quiz = currentCourse.quizzes.find(q => q.id === selectedQuiz);
     if (quiz) {
@@ -75,6 +97,7 @@ export function CourseViewer({ onNavigate }: CourseViewerProps) {
     }
   }
 
+  // Documentation viewer
   if (selectedDoc) {
     const doc = currentCourse.documentation.find(d => d.id === selectedDoc);
     if (doc) {
@@ -107,7 +130,7 @@ export function CourseViewer({ onNavigate }: CourseViewerProps) {
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 mb-8">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-900">Course Progress</h3>
-          <span className="text-2xl font-bold text-blue-600">{currentCourse.progress}%</span>
+          <span className="text-2xl font-bold text-blue-600">{currentCourse.progress.toFixed(2)}%</span>
         </div>
         <div className="w-full bg-white rounded-full h-3 mb-4">
           <div
@@ -155,7 +178,7 @@ export function CourseViewer({ onNavigate }: CourseViewerProps) {
         })}
       </div>
 
-      {/* Content View */}
+      {/* Tab Content */}
       <div className="space-y-4">
         {activeTab === 'lectures' && (
           <>
@@ -174,13 +197,19 @@ export function CourseViewer({ onNavigate }: CourseViewerProps) {
                     )}
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">{lecture.title}</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                      Lecture {lecture.order} — {sanitizeTitle(lecture.title)}
+                    </h3>
                     <div className="flex items-center space-x-4 text-sm text-gray-500">
                       <div className="flex items-center space-x-1">
                         <Clock className="w-4 h-4" />
                         <span>{lecture.duration}</span>
                       </div>
-                      <span>Lecture {lecture.order}</span>
+                      {((lecture.order % 10 === 0) || (lecture.order === currentCourse.lectures.length)) && (
+                        <span className="ml-2 text-sm font-medium text-indigo-600">
+                          — Quiz Embedded
+                        </span>
+                      )}
                     </div>
                   </div>
                   <div className="flex-shrink-0">

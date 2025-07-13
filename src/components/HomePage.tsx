@@ -29,7 +29,7 @@ export function HomePage({ onNavigate, showLoginToast, isAuthenticated }: HomePa
 
     const fetchUser = async () => {
       try {
-        const res = await axios.get('https://ailearning-atyu.onrender.com/api/auth/check', {
+        const res = await axios.get('https://ailearning-2.onrender.com/api/auth/check', {
           withCredentials: true
         });
         if (res.data?.username) {
@@ -55,12 +55,17 @@ export function HomePage({ onNavigate, showLoginToast, isAuthenticated }: HomePa
     setIsGenerating(true);
     try {
       const response = await axios.post(
-        'https://ailearning-atyu.onrender.com/api/courses',
+        'https://ailearning-2.onrender.com/api/courses',
         { prompt },
         { withCredentials: true }
       );
 
       const course = response.data;
+      console.log(course);
+      if (course.status === 'already_exists') {
+      toast.error(course.message || 'Course already exists');
+      return; // 🔁 Early return: Don't add or set course
+    }
       addCourse(course);
       setCurrentCourse(course);
       toast.success('Course created successfully');

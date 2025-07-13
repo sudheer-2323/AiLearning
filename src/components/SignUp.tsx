@@ -4,9 +4,11 @@ import toast from 'react-hot-toast';
 
 type SignUpProps = {
   onNavigate: (page: string) => void;
+  setAuthenticated: (value: boolean) => void;
+
 };
 
-export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
+export const SignUp: React.FC<SignUpProps> = ({ onNavigate,setAuthenticated }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,7 +21,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
       setLoading(true);
 
       const response = await axios.post(
-        'https://ailearning-atyu.onrender.com/api/auth/signup',
+        'https://ailearning-2.onrender.com/api/auth/signup',
         { username, password },
         { withCredentials: true }
       );
@@ -27,16 +29,17 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
       toast.success(response.data.message || 'Account created successfully');
 
       // ✅ Verify user is authenticated (cookie was set)
-      const authRes = await axios.get('https://ailearning-atyu.onrender.com/api/auth/check', {
+      const authRes = await axios.get('https://ailearning-2.onrender.com/api/auth/check', {
         withCredentials: true,
       });
 
       if (authRes.data.isAuthenticated) {
         toast.success('Signed in successfully');
-        onNavigate('courses');
+        setAuthenticated(true);
+        onNavigate('home');
       } else {
         toast.error('Signup succeeded but not authenticated. Please log in.');
-        onNavigate('LogIn');
+        onNavigate('home');
       }
 
     } catch (error: any) {
