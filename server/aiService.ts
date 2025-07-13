@@ -131,7 +131,7 @@ export function extractValidJsonBlock(text: string): any {
 
     return JSON.parse(safeJson);
   } catch (err) {
-    console.error('❌ Failed to parse JSON block:\n', rawJson);
+    console.error(' Failed to parse JSON block:\n', rawJson);
     throw new Error('AI returned invalid JSON format.');
   }
 }
@@ -144,11 +144,12 @@ export class AIService {
 
       const userMatch = await Course.findOne({
         $or: [
-          { title: { $regex: prompt, $options: 'i' } },
-          { description: { $regex: prompt, $options: 'i' } },
-        ],
+          { title: { $regex: `\\b${prompt}\\b`, $options: 'i' } },
+          { description: { $regex: `\\b${prompt}\\b`, $options: 'i' } },
+      ],
         _id: { $in: user.courses }
-      });
+        });
+
 
       if (userMatch) {
         return {
@@ -158,10 +159,10 @@ export class AIService {
       }
 
       const globalCourse = await Course.findOne({
-        $or: [
-          { title: { $regex: prompt, $options: 'i' } },
-          { description: { $regex: prompt, $options: 'i' } },
-        ],
+       $or: [
+          { title: { $regex: `\\b${prompt}\\b`, $options: 'i' } },
+          { description: { $regex: `\\b${prompt}\\b`, $options: 'i' } },
+      ],
       });
 
       if (globalCourse) {
