@@ -55,7 +55,7 @@ async function withRetry<T>(fn: () => Promise<T>, retries = 3, delayMs = 5000): 
 async function findYouTubePlaylistId(prompt: string): Promise<string | undefined> {
   const res = await withRetry(() =>
     youtube.search.list({
-      q: `${prompt} playlist`,
+      q: `${prompt} course playlist`,
       part: ['snippet'],
       type: ['playlist'],
       maxResults: 5,
