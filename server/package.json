@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "Backend for e-learning platform",
   "main": "index.ts",
-  "scripts": {
-    "start": "NODE_OPTIONS='--max-old-space-size=2048' ts-node index.ts",
-    "build": "tsc",
-    "start:prod": "node dist/index.js"
-  },
+ "scripts": {
+  "start": "node dist/index.js",        // Production: run compiled JS
+  "build": "tsc",                       // Compile TS -> JS
+  "start:dev": "ts-node index.ts"       // Development only
+},
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
     "@tavily/core": "^0.5.9",
