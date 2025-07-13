@@ -4,9 +4,9 @@
   "description": "Backend for e-learning platform",
   "main": "index.ts",
  "scripts": {
-  "start": "node dist/index.js",        // Production: run compiled JS
-  "build": "tsc",                       // Compile TS -> JS
-  "start:dev": "ts-node index.ts"       // Development only
+  "start": "node dist/index.js",  
+  "build": "tsc",                   
+  "start:dev": "ts-node index.ts"       
 },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
