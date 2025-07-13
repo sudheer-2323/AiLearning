@@ -33,7 +33,7 @@ import { User } from './models/User';
 
 
 app.use(cors({
-  origin: ['https://ailearning-atyu.onrender.com'],
+  origin: ['https://ailearning-2.onrender.com'],
   credentials: true,
 }));
 app.use(cookieParser());

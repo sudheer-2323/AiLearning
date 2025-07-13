@@ -31,8 +31,8 @@ export function CourseProvider({ children, onNavigate, isAuthenticated }: Course
     try {
       console.log(' Fetching courses');
       const [coursesRes, progressRes] = await Promise.all([
-        axios.get<Course[]>('https://ailearning-2.onrender.com/api/courses', { withCredentials: true }),
-        axios.get('https://ailearning-2.onrender.com/api/progress', { withCredentials: true }),
+        axios.get<Course[]>('https://ailearning-atyu.onrender.com/api/courses', { withCredentials: true }),
+        axios.get('https://ailearning-atyu.onrender.com/api/progress', { withCredentials: true }),
       ]);
 
       const courses = coursesRes.data;
@@ -110,7 +110,7 @@ export function CourseProvider({ children, onNavigate, isAuthenticated }: Course
       console.log(' Sending lecture completion request:', { courseId, lectureId });
 
       const response = await axios.post(
-        'https://ailearning-2.onrender.com/api/progress/lecture',
+        'https://ailearning-atyu.onrender.com/api/progress/lecture',
         { courseId, lectureId },
         { withCredentials: true }
       );
@@ -163,7 +163,7 @@ export function CourseProvider({ children, onNavigate, isAuthenticated }: Course
     try {
       console.log(' Sending quiz completion request:', { courseId, quizId, score });
       await axios.post(
-        'https://ailearning-2.onrender.com/api/progress/quiz',
+        'https://ailearning-atyu.onrender.com/api/progress/quiz',
         { courseId, quizId, score },
         { withCredentials: true }
       );

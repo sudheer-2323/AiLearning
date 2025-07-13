@@ -21,7 +21,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate,setAuthenticated }) =
       setLoading(true);
 
       const response = await axios.post(
-        'https://ailearning-2.onrender.com/api/auth/signup',
+        'https://ailearning-atyu.onrender.com/api/auth/signup',
         { username, password },
         { withCredentials: true }
       );
@@ -29,7 +29,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate,setAuthenticated }) =
       toast.success(response.data.message || 'Account created successfully');
 
       // ✅ Verify user is authenticated (cookie was set)
-      const authRes = await axios.get('https://ailearning-2.onrender.com/api/auth/check', {
+      const authRes = await axios.get('https://ailearning-atyu.onrender.com/api/auth/check', {
         withCredentials: true,
       });
 
