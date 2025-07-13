@@ -35,6 +35,14 @@ function convertISO8601Duration(isoDuration: string): string {
   const s = seconds ? `${seconds}s` : '';
   return `${h}${m}${s}`.trim() || '0s';
 }
+function escapeRegex(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function isAlpha(str: string): boolean {
+  return /^[a-zA-Z]+$/.test(str);
+}
+
 
 async function withRetry<T>(fn: () => Promise<T>, retries = 3, delayMs = 5000): Promise<T> {
   for (let attempt = 1; attempt <= retries; attempt++) {
@@ -142,13 +150,16 @@ export class AIService {
       const user = await User.findById(userId);
       if (!user) throw new Error('User not found');
 
-      const userMatch = await Course.findOne({
-        $or: [
-          { title: { $regex: `\\b${prompt}\\b`, $options: 'i' } },
-          { description: { $regex: `\\b${prompt}\\b`, $options: 'i' } },
-      ],
-        _id: { $in: user.courses }
-        });
+      const escapedPrompt = escapeRegex(prompt.trim());
+      const safePattern = isAlpha(prompt) ? `\\b${escapedPrompt}\\b` : escapedPrompt;
+
+        const userMatch = await Course.findOne({
+          $or: [
+                  { title: { $regex: safePattern, $options: 'i' } },
+                  { description: { $regex: safePattern, $options: 'i' } },
+              ],
+            _id: { $in: user.courses }
+          });
 
 
       if (userMatch) {
@@ -160,8 +171,8 @@ export class AIService {
 
       const globalCourse = await Course.findOne({
        $or: [
-          { title: { $regex: `\\b${prompt}\\b`, $options: 'i' } },
-          { description: { $regex: `\\b${prompt}\\b`, $options: 'i' } },
+          { title: { $regex: safePattern, $options: 'i' } },
+          { description: { $regex: safePattern, $options: 'i' } },
       ],
       });
 
